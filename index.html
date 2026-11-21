@@ -382,8 +382,6 @@
     </footer>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"
-          onerror="window.__threeFailed = true"></script>
   <script>
     (function () {
       var canvas = document.getElementById("globe");
@@ -398,13 +396,51 @@
         spinBtn.disabled = true;
       }
 
-      if (window.__threeFailed || typeof THREE === "undefined") { showFallback(); return; }
+      function webglSupported() {
+        if (typeof WebGLRenderingContext === "undefined" && typeof WebGL2RenderingContext === "undefined") return false;
+        var names = ["webgl2", "webgl", "experimental-webgl", "moz-webgl", "webkit-3d"];
+        for (var i = 0; i < names.length; i++) {
+          try {
+            var probe = document.createElement("canvas");
+            if (probe.getContext(names[i])) return true;
+          } catch (e) { /* try next */ }
+        }
+        return false;
+      }
 
-      try {
-        var testCanvas = document.createElement("canvas");
-        var gl = testCanvas.getContext("webgl") || testCanvas.getContext("experimental-webgl");
-        if (!gl) { showFallback(); return; }
-      } catch (e) { showFallback(); return; }
+      if (!webglSupported()) { showFallback(); return; }
+
+      // ---------- Load Three.js with CDN fallbacks ----------
+      var threeCdns = [
+        "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js",
+        "https://unpkg.com/three@0.160.0/build/three.min.js",
+        "https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js"
+      ];
+      var cdnIndex = 0;
+
+      function tryLoadThree() {
+        if (typeof THREE !== "undefined") { initGlobe(); return; }
+        if (cdnIndex >= threeCdns.length) { showFallback(); return; }
+        var script = document.createElement("script");
+        script.src = threeCdns[cdnIndex++];
+        script.onload = function () { initGlobe(); };
+        script.onerror = function () {
+          if (script.parentNode) script.parentNode.removeChild(script);
+          tryLoadThree();
+        };
+        document.head.appendChild(script);
+      }
+
+      function initGlobe() {
+        if (typeof THREE === "undefined") { showFallback(); return; }
+        try {
+          main();
+        } catch (e) {
+          showFallback();
+        }
+      }
+
+      function main() {
 
       // ---------- Scene ----------
       var scene = new THREE.Scene();
@@ -629,6 +665,9 @@
       }
       resize();
       tick();
+      }
+
+      tryLoadThree();
     })();
   </script>
 </body>
