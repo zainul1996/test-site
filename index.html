@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Hello, World — a modern 3D globe landing page." />
+  <title>Hello, World — Globe</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #05070f;
+      --ink: #f2f5ff;
+      --muted: rgba(242, 245, 255, 0.62);
+      --accent: #6ea8ff;
+      --accent-2: #9d7bff;
+      --line: rgba(255, 255, 255, 0.09);
+      --radius: 999px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+
+    body {
+      font-family: "Sora", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: radial-gradient(1200px 800px at 70% -10%, rgba(110, 168, 255, 0.10), transparent 60%),
+                  radial-gradient(900px 700px at 10% 110%, rgba(157, 123, 255, 0.08), transparent 60%),
+                  var(--bg);
+      color: var(--ink);
+      overflow-x: hidden;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ---------- Header ---------- */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1.25rem clamp(1.25rem, 4vw, 3rem);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(8px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      font-size: 1rem;
+      color: var(--ink);
+      text-decoration: none;
+    }
+
+    .brand .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow: 0 0 12px rgba(110, 168, 255, 0.8);
+    }
+
+    header nav a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      padding: 0.5rem 0.9rem;
+      border-radius: var(--radius);
+      transition: color 0.2s ease, background 0.2s ease;
+    }
+
+    header nav a:hover,
+    header nav a:focus-visible {
+      color: var(--ink);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+      border-radius: 4px;
+    }
+
+    header nav a:focus-visible { border-radius: var(--radius); }
+
+    /* ---------- Hero ---------- */
+    main {
+      flex: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+      align-items: center;
+      gap: clamp(1.5rem, 4vw, 4rem);
+      padding: clamp(2rem, 6vh, 5rem) clamp(1.25rem, 4vw, 4rem);
+      max-width: 1280px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .copy .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.78rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid rgba(110, 168, 255, 0.35);
+      background: rgba(110, 168, 255, 0.08);
+      padding: 0.45rem 0.9rem;
+      border-radius: var(--radius);
+      margin-bottom: 1.4rem;
+    }
+
+    h1 {
+      font-size: clamp(2.6rem, 6.5vw, 4.6rem);
+      line-height: 1.04;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin: 0 0 1.1rem;
+      background: linear-gradient(120deg, #ffffff 30%, var(--accent) 70%, var(--accent-2));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .copy p {
+      font-size: clamp(1rem, 1.6vw, 1.15rem);
+      line-height: 1.65;
+      color: var(--muted);
+      max-width: 46ch;
+      margin: 0 0 2rem;
+    }
+
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.85rem;
+      align-items: center;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font: inherit;
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding: 0.8rem 1.5rem;
+      border-radius: var(--radius);
+      border: 1px solid transparent;
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .btn-primary {
+      color: #04060d;
+      background: linear-gradient(120deg, var(--accent), var(--accent-2));
+      box-shadow: 0 8px 30px rgba(110, 168, 255, 0.35);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 38px rgba(110, 168, 255, 0.5);
+    }
+
+    .btn-ghost {
+      color: var(--ink);
+      background: rgba(255, 255, 255, 0.04);
+      border-color: var(--line);
+    }
+
+    .btn-ghost:hover {
+      background: rgba(255, 255, 255, 0.09);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .btn:active { transform: translateY(0); }
+    .btn:disabled { opacity: 0.6; cursor: default; transform: none; }
+
+    .stats {
+      display: flex;
+      gap: clamp(1.5rem, 3vw, 3rem);
+      margin-top: 2.6rem;
+      flex-wrap: wrap;
+    }
+
+    .stat b {
+      display: block;
+      font-size: 1.4rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    .stat span {
+      font-size: 0.8rem;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    /* ---------- Globe ---------- */
+    .globe-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: clamp(320px, 55vw, 560px);
+    }
+
+    #globe {
+      width: 100%;
+      max-width: 640px;
+      aspect-ratio: 1 / 1;
+      display: block;
+      cursor: grab;
+      touch-action: none;
+    }
+
+    #globe.dragging { cursor: grabbing; }
+
+    #globe:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 4px;
+      border-radius: 50%;
+    }
+
+    .globe-halo {
+      position: absolute;
+      inset: 8%;
+      border-radius: 50%;
+      background: radial-gradient(circle at 50% 50%, rgba(110, 168, 255, 0.14), transparent 62%);
+      filter: blur(20px);
+      pointer-events: none;
+    }
+
+    .globe-hint {
+      position: absolute;
+      bottom: clamp(0.5rem, 2vw, 1.5rem);
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.78rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
+    .globe-fallback {
+      display: none;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.95rem;
+      padding: 2rem;
+      border: 1px dashed var(--line);
+      border-radius: 16px;
+      max-width: 340px;
+    }
+
+    .globe-fallback.show { display: block; }
+
+    /* ---------- Footer ---------- */
+    footer {
+      padding: 1.4rem clamp(1.25rem, 4vw, 3rem);
+      border-top: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      font-size: 0.82rem;
+      color: var(--muted);
+      flex-wrap: wrap;
+    }
+
+    /* ---------- Loading state ---------- */
+    .globe-loading {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+    }
+
+    .globe-loading .ring {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 255, 255, 0.12);
+      border-top-color: var(--accent);
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ---------- Responsive ---------- */
+    @media (max-width: 900px) {
+      main {
+        grid-template-columns: 1fr;
+        text-align: center;
+        padding-top: 2rem;
+      }
+
+      .copy p { margin-inline: auto; }
+      .cta-row, .stats { justify-content: center; }
+      .globe-wrap { order: -1; }
+      .globe-halo { inset: 4%; }
+    }
+
+    @media (max-width: 420px) {
+      header nav a:not(:first-child) { display: none; }
+      .stat b { font-size: 1.15rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .globe-loading .ring { animation-duration: 2.4s; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <a class="brand" href="#"><span class="dot" aria-hidden="true"></span>Orbital</a>
+      <nav aria-label="Primary">
+        <a href="#globe">Globe</a>
+        <a href="#">About</a>
+        <a href="#">Contact</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="copy" aria-labelledby="hero-title">
+        <span class="eyebrow">A tiny tour of our planet</span>
+        <h1 id="hero-title">Hello, World.</h1>
+        <p>
+          Say hi to the whole planet in one page — a living, spinning globe rendered
+          in your browser. Drag it, spin it, and watch the light drift across the
+          oceans.
+        </p>
+        <div class="cta-row">
+          <button class="btn btn-primary" id="spin-btn" type="button">Spin the globe</button>
+          <a class="btn btn-ghost" href="#">Learn more</a>
+        </div>
+        <div class="stats" aria-label="Highlights">
+          <div class="stat"><b>7.9B</b><span>People</span></div>
+          <div class="stat"><b>195</b><span>Countries</span></div>
+          <div class="stat"><b>1</b><span>Home</span></div>
+        </div>
+      </section>
+
+      <section class="globe-wrap" aria-label="Interactive 3D globe">
+        <div class="globe-halo" aria-hidden="true"></div>
+        <canvas id="globe" tabindex="0" role="img"
+                aria-label="A rotating 3D globe of Earth. Drag or use arrow keys to rotate it."></canvas>
+        <div class="globe-loading" id="globe-loading" aria-hidden="true"><div class="ring"></div></div>
+        <p class="globe-hint">Drag to rotate</p>
+        <div class="globe-fallback" id="globe-fallback" role="status">
+          Your browser can’t render the 3D globe (WebGL unavailable), but the rest
+          of the page works fine.
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <span>© 2026 Orbital — a hello-world demo</span>
+      <span>Made with Three.js</span>
+    </footer>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"
+          onerror="window.__threeFailed = true"></script>
+  <script>
+    (function () {
+      var canvas = document.getElementById("globe");
+      var loading = document.getElementById("globe-loading");
+      var fallback = document.getElementById("globe-fallback");
+      var spinBtn = document.getElementById("spin-btn");
+
+      function showFallback() {
+        loading.style.display = "none";
+        fallback.classList.add("show");
+        canvas.style.display = "none";
+        spinBtn.disabled = true;
+      }
+
+      if (window.__threeFailed || typeof THREE === "undefined") { showFallback(); return; }
+
+      try {
+        var testCanvas = document.createElement("canvas");
+        var gl = testCanvas.getContext("webgl") || testCanvas.getContext("experimental-webgl");
+        if (!gl) { showFallback(); return; }
+      } catch (e) { showFallback(); return; }
+
+      // ---------- Scene ----------
+      var scene = new THREE.Scene();
+
+      var camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
+      camera.position.set(0, 0.4, 3.2);
+
+      var renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+
+      // ---------- Starfield ----------
+      var starCount = 1400;
+      var starGeo = new THREE.BufferGeometry();
+      var positions = new Float32Array(starCount * 3);
+      for (var i = 0; i < starCount; i++) {
+        var r = 14 + Math.random() * 26;
+        var theta = Math.random() * Math.PI * 2;
+        var phi = Math.acos(2 * Math.random() - 1);
+        positions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+        positions[i * 3 + 1] = r * Math.cos(phi);
+        positions[i * 3 + 2] = r * Math.sin(phi) * Math.sin(theta);
+      }
+      starGeo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+      var starMat = new THREE.PointsMaterial({
+        color: 0xffffff, size: 0.07, sizeAttenuation: true,
+        transparent: true, opacity: 0.85
+      });
+      var stars = new THREE.Points(starGeo, starMat);
+      scene.add(stars);
+
+      // ---------- Globe texture (real Earth imagery) ----------
+      var loader = new THREE.TextureLoader();
+      loader.setCrossOrigin("anonymous");
+      var earthGroup = new THREE.Group();
+      scene.add(earthGroup);
+
+      var TILT = 0.41; // ~23.5° axial tilt
+      earthGroup.rotation.z = TILT;
+
+      var earthMesh = new THREE.Mesh(
+        new THREE.SphereGeometry(1, 64, 64),
+        new THREE.MeshPhongMaterial({
+          color: 0x2a3550,
+          shininess: 12,
+          specular: new THREE.Color(0x223355)
+        })
+      );
+      earthGroup.add(earthMesh);
+
+      // Clouds layer (fades in with texture)
+      var cloudMesh = new THREE.Mesh(
+        new THREE.SphereGeometry(1.012, 64, 64),
+        new THREE.MeshPhongMaterial({ color: 0xffffff, transparent: true, opacity: 0 })
+      );
+      earthGroup.add(cloudMesh);
+
+      var texturesReady = 0;
+      function onTexture() {
+        texturesReady++;
+        if (texturesReady === 2 && loading) {
+          loading.style.transition = "opacity .6s";
+          loading.style.opacity = "0";
+          setTimeout(function () { if (loading.parentNode) loading.parentNode.removeChild(loading); }, 700);
+        }
+      }
+
+      loader.load(
+        "https://cdn.jsdelivr.net/gh/mrdoob/three.js@r160/examples/textures/planets/earth_atmos_2048.jpg",
+        function (tex) {
+          earthMesh.material = new THREE.MeshPhongMaterial({
+            map: tex, shininess: 14, specular: new THREE.Color(0x223355)
+          });
+          onTexture();
+        },
+        undefined,
+        function () { onTexture(); } // keep procedural look if offline
+      );
+
+      loader.load(
+        "https://cdn.jsdelivr.net/gh/mrdoob/three.js@r160/examples/textures/planets/earth_clouds_1024.png",
+        function (tex) {
+          cloudMesh.material = new THREE.MeshPhongMaterial({
+            map: tex, transparent: true, opacity: 0.28, depthWrite: false
+          });
+          onTexture();
+        },
+        undefined,
+        function () { onTexture(); }
+      );
+
+      // ---------- Atmosphere glow (fresnel shader) ----------
+      var atmosphere = new THREE.Mesh(
+        new THREE.SphereGeometry(1.18, 64, 64),
+        new THREE.ShaderMaterial({
+          transparent: true,
+          blending: THREE.AdditiveBlending,
+          side: THREE.BackSide,
+          depthWrite: false,
+          uniforms: {},
+          vertexShader: [
+            "varying vec3 vNormal;",
+            "void main() {",
+            "  vNormal = normalize(normalMatrix * normal);",
+            "  gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);",
+            "}"
+          ].join("\n"),
+          fragmentShader: [
+            "varying vec3 vNormal;",
+            "void main() {",
+            "  float intensity = pow(0.62 - dot(vNormal, vec3(0.0, 0.0, 1.0)), 3.0);",
+            "  gl_FragColor = vec4(0.42, 0.62, 1.0, 1.0) * intensity;",
+            "}"
+          ].join("\n")
+        })
+      );
+      scene.add(atmosphere);
+
+      // ---------- Lights ----------
+      scene.add(new THREE.AmbientLight(0x334466, 0.9));
+      var sun = new THREE.DirectionalLight(0xffffff, 2.2);
+      sun.position.set(-2.4, 1.2, 2.6);
+      scene.add(sun);
+      var rim = new THREE.DirectionalLight(0x6ea8ff, 0.7);
+      rim.position.set(3, -1.5, -2);
+      scene.add(rim);
+
+      // ---------- Interaction: drag to rotate + keyboard ----------
+      var isDragging = false;
+      var prevX = 0, prevY = 0;
+      var velX = 0, velY = 0;
+      var userPitch = 0;
+      var autoSpin = true;
+
+      function localPoint(e) {
+        var rect = canvas.getBoundingClientRect();
+        return {
+          x: ((e.clientX - rect.left) / rect.width) * 2 - 1,
+          y: ((e.clientY - rect.top) / rect.height) * 2 - 1
+        };
+      }
+
+      function onPointerDown(e) {
+        isDragging = true;
+        autoSpin = false;
+        canvas.classList.add("dragging");
+        var p = localPoint(e);
+        prevX = p.x; prevY = p.y;
+        if (canvas.setPointerCapture) {
+          try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
+        }
+        canvas.focus();
+      }
+
+      function onPointerMove(e) {
+        if (!isDragging) return;
+        var p = localPoint(e);
+        velY = (p.x - prevX) * 2.6;
+        velX = (p.y - prevY) * 2.6;
+        earthGroup.rotation.y += velY;
+        userPitch = Math.max(-1.1, Math.min(1.1, userPitch + velX));
+        prevX = p.x; prevY = p.y;
+      }
+
+      function onPointerUp() {
+        isDragging = false;
+        canvas.classList.remove("dragging");
+        // Resume gentle auto-spin shortly after release
+        setTimeout(function () { if (!isDragging) autoSpin = true; }, 2200);
+      }
+
+      canvas.addEventListener("pointerdown", onPointerDown);
+      window.addEventListener("pointermove", onPointerMove);
+      window.addEventListener("pointerup", onPointerUp);
+      window.addEventListener("pointercancel", onPointerUp);
+
+      canvas.addEventListener("keydown", function (e) {
+        var step = 0.15;
+        if (e.key === "ArrowLeft") { earthGroup.rotation.y -= step; e.preventDefault(); }
+        else if (e.key === "ArrowRight") { earthGroup.rotation.y += step; e.preventDefault(); }
+        else if (e.key === "ArrowUp") { userPitch = Math.min(1.1, userPitch + step); e.preventDefault(); }
+        else if (e.key === "ArrowDown") { userPitch = Math.max(-1.1, userPitch - step); e.preventDefault(); }
+        else if (e.key === " " || e.key === "Enter") { autoSpin = !autoSpin; e.preventDefault(); }
+      });
+
+      spinBtn.addEventListener("click", function () {
+        autoSpin = true;
+        velY = 0.12; // give it a kick
+      });
+
+      // ---------- Resize ----------
+      function resize() {
+        var w = canvas.clientWidth || canvas.parentElement.clientWidth;
+        var h = canvas.clientHeight || w;
+        if (canvas.width === Math.round(w * renderer.getPixelRatio())) return;
+        renderer.setSize(w, h, false);
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+      }
+      window.addEventListener("resize", resize);
+
+      // ---------- Animate ----------
+      var clock = new THREE.Clock();
+      function tick() {
+        resize();
+        var t = clock.getElapsedTime();
+
+        if (autoSpin && !isDragging) {
+          earthGroup.rotation.y += 0.0016 + velY;
+          velY *= 0.985; // decays the "kick"
+        } else if (isDragging) {
+          earthGroup.rotation.y += velY * 0.15;
+          velY *= 0.9;
+        }
+
+        earthGroup.rotation.x = userPitch + Math.sin(t * 0.25) * 0.03;
+
+        stars.rotation.y = t * 0.008;
+        if (cloudMesh.material.map) cloudMesh.rotation.y += 0.0004;
+
+        renderer.render(scene, camera);
+        requestAnimationFrame(tick);
+      }
+      resize();
+      tick();
+    })();
+  </script>
+</body>
+</html>
